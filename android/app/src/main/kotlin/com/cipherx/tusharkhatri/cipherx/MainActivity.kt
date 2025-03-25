@@ -1,4 +1,4 @@
-package com.cipherx.tusharkhatri.cipherx
+package com.cipherschools.assignment
 
 import io.flutter.embedding.android.FlutterActivity
 
