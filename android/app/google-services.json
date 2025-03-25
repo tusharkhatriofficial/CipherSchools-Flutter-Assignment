@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "731555670155",
+    "project_id": "cypherx-8417e",
+    "storage_bucket": "cypherx-8417e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:731555670155:android:cd3b6b778c052872aacc8e",
+        "android_client_info": {
+          "package_name": "com.cypherx"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwtiaNUm6-8VemHMyNDAAQfeNfVcziogQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
