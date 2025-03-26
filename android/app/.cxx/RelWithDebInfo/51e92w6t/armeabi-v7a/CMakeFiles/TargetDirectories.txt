@@ -1,0 +1,2 @@
+/Users/tusharkhatri/Downloads/cipherx/android/app/.cxx/RelWithDebInfo/51e92w6t/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/tusharkhatri/Downloads/cipherx/android/app/.cxx/RelWithDebInfo/51e92w6t/armeabi-v7a/CMakeFiles/rebuild_cache.dir

@@ -1,5 +1,6 @@
 import 'package:cipherx/constants/colors.dart';
 import 'package:cipherx/screens/welcome_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,8 +8,35 @@ import 'package:hive/hive.dart';
 
 import '../helpers/auth_helper.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+
+  Future<Map<String, String>?> fetchUserData() async {
+    String uid = FirebaseAuth.instance.currentUser?.uid ?? "";
+
+    if (uid.isEmpty) return null;
+    try {
+      DocumentSnapshot userDoc =
+      await FirebaseFirestore.instance.collection("users").doc(uid).get();
+
+      if (userDoc.exists) {
+        return {
+          "name": userDoc["name"] ?? "No Name",
+          "email": userDoc["email"] ?? "No Email",
+        };
+      }
+    } catch (e) {
+      print("Error fetching user data: $e");
+    }
+    return null;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -36,22 +64,38 @@ class ProfileScreen extends StatelessWidget {
         child: Column(
           children: [
             //User details row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                CircleAvatar(
-                  radius: 55.0,
-                  backgroundImage: NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWkpRcVB4hMuHQo3ZoEu0ySR4ZgHCYIz45QQ&s"),
-                ),
-                Expanded(
-                  child: ListTile(
-                    title: Text("@USER${(FirebaseAuth.instance.currentUser!.uid).substring(0, 5)}", style: GoogleFonts.poppins(fontSize: 15.0),),
-                    subtitle: Text("${(FirebaseAuth.instance.currentUser!.displayName!).substring(0, 9)}..", style: GoogleFonts.poppins(fontSize: 30.0),),
-                    trailing: Icon(Icons.edit, size: 40.0, color: kPrimaryColor,),
-                  ),
-                ),
-              ],
+            FutureBuilder(
+                future: fetchUserData(),
+                builder: (context, snapshot){
+                  if(snapshot.connectionState == ConnectionState.waiting){
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  if (!snapshot.hasData || snapshot.data == null) {
+                    return Center(child: Text("Error loading profile"));
+                  }
+                  final userData = snapshot.data!;
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      CircleAvatar(
+                        radius: 55.0,
+                        backgroundImage: NetworkImage(
+                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWkpRcVB4hMuHQo3ZoEu0ySR4ZgHCYIz45QQ&s",
+                        ),
+                      ),
+                      Expanded(
+                        child: ListTile(
+                          title: Text("@USER${FirebaseAuth.instance.currentUser!.uid.substring(0, 5)}",
+                              style: GoogleFonts.poppins(fontSize: 15.0)),
+                          subtitle: Text(userData["name"]!,
+                              style: GoogleFonts.poppins(fontSize: 25.0)),
+                          trailing: Icon(Icons.edit, size: 40.0, color: kPrimaryColor),
+                        ),
+                      ),
+                    ],
+                  );
+                }
             ),
             SizedBox(height: 40.0,),
             //Additional Options
@@ -67,18 +111,23 @@ class ProfileScreen extends StatelessWidget {
                   //Logout tile
                   Padding(
                     padding: const EdgeInsets.all(21.0),
-                    child: Material(
-                      elevation: 0.5,
-                      color: kPrimaryTextColor,
-                      shadowColor: kPrimaryColor,
-                      borderRadius: BorderRadius.circular(21.0),
-                      child: ListTile(
-                        title: Text("Logout"),
-                        trailing: InkWell(
-                          onTap: (){
-                            logout(context);
-                          },
-                            child: Icon(Icons.logout)),
+                    child: InkWell(
+                      onTap: (){
+                        logout(context);
+                      },
+                      child: Material(
+                        elevation: 0.5,
+                        color: kPrimaryTextColor,
+                        shadowColor: kPrimaryColor,
+                        borderRadius: BorderRadius.circular(21.0),
+                        child: ListTile(
+                          title: Text("Logout"),
+                          trailing: InkWell(
+                            onTap: (){
+                              logout(context);
+                            },
+                              child: Icon(Icons.logout)),
+                        ),
                       ),
                     ),
                   )

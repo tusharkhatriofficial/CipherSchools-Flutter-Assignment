@@ -130,14 +130,14 @@ class HomeScreen extends StatelessWidget {
                                 //TODO: Edit income
                                 showAmountBottomSheet(context);
 
-                              }, icon: Icon(Icons.edit, size: 30.0, color: kPrimaryTextColor,)),
+                              }, icon: Icon(Icons.edit, size: MediaQuery.of(context).size.height/40, color: kPrimaryTextColor,)),
                             right: 1.0,
                             top: 1.0,
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(width: 20.0,),
+                    SizedBox(width: 6.0,),
                     //Expense Card
                     Expanded(
                       child: Container(

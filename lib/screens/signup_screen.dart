@@ -91,7 +91,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       hintText: "Email",
                       obscureText: false,
                       nameController: _emailController),
-                  SizedBox(height: 20,),
+                  SizedBox(height: 10,),
                   CustomTextField(
                       hintText: "Password",
                       obscureText: true,

@@ -7,6 +7,7 @@ void showAmountBottomSheet(BuildContext context) {
   TextEditingController amountController = TextEditingController();
 
   showModalBottomSheet(
+    isScrollControlled: true,
     context: context,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
@@ -14,7 +15,12 @@ void showAmountBottomSheet(BuildContext context) {
     backgroundColor: Colors.white,
     builder: (context) {
       return Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: EdgeInsets.only(
+          left: 20,
+          right: 20,
+          top: 20,
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -63,6 +69,7 @@ void showAmountBottomSheet(BuildContext context) {
                 ),
               ),
             ),
+            SizedBox(height: 20.0,)
           ],
         ),
       );

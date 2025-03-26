@@ -33,20 +33,22 @@ class WelcomeScreen extends StatelessWidget {
                             fontWeight: FontWeight.w500),
                       ),
                       SizedBox(width: 20.0,),
-                      InkWell(
-                        onTap: (){
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-                            return SignupScreen();
-                          }));
-                        },
-                        child: CircleAvatar(
-                          radius: 50.0,
-                            backgroundColor: Color(0xffD0C1E9),
-                            child: Icon(
-                              Icons.arrow_forward_ios,
-                              size: 50.0,
-                              color: kPrimaryIconColor,
-                                ),),
+                      Expanded(
+                        child: InkWell(
+                          onTap: (){
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+                              return SignupScreen();
+                            }));
+                          },
+                          child: CircleAvatar(
+                            radius: 50.0,
+                              backgroundColor: Color(0xffD0C1E9),
+                              child: Icon(
+                                Icons.arrow_forward_ios,
+                                size: 50.0,
+                                color: kPrimaryIconColor,
+                                  ),),
+                        ),
                       ),
                     ],
                   ),
