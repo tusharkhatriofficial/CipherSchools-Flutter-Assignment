@@ -113,13 +113,15 @@ class HomeScreen extends StatelessWidget {
                                   radius: 27.0,
                                 ),
                                 SizedBox(width: 10.0,),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("Income", style: GoogleFonts.poppins(color: Colors.white, fontSize: 14.0, fontWeight: FontWeight.w500),),
-                                    Text("₹ ${monthlyData.totalIncome}", style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),),
-                                  ],
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text("Income", style: GoogleFonts.poppins(color: Colors.white, fontSize: 14.0, fontWeight: FontWeight.w500),),
+                                      Text("₹ ${monthlyData.totalIncome}", style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),),
+                                    ],
+                                  ),
                                 )
                               ],
                             ),
@@ -154,16 +156,18 @@ class HomeScreen extends StatelessWidget {
                               radius: 27.0,
                             ),
                             SizedBox(width: 10.0,),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Expense", style: GoogleFonts.poppins(color: Colors.white, fontSize: 14.0, fontWeight: FontWeight.w500),),
-                                Consumer<ExpenseProvider>(
-                                    builder: (context, expenseProvider, child){
-                                      return Text("₹ ${monthlyData.totalExpense}", style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),);
-                                    }),
-                              ],
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Expense", style: GoogleFonts.poppins(color: Colors.white, fontSize: 14.0, fontWeight: FontWeight.w500),),
+                                  Consumer<ExpenseProvider>(
+                                      builder: (context, expenseProvider, child){
+                                        return Text("₹ ${monthlyData.totalExpense}", style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),);
+                                      }),
+                                ],
+                              ),
                             ),
                           ],
                         ),
