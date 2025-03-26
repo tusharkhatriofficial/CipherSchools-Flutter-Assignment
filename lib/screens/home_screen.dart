@@ -1,10 +1,14 @@
+import 'package:cipherx/constants/colors.dart';
 import 'package:cipherx/helpers/auth_helper.dart';
+import 'package:cipherx/screens/add_expense.dart';
 import 'package:cipherx/screens/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../models/expense.dart';
 import '../providers/expense_provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -28,8 +32,20 @@ class HomeScreen extends StatelessWidget {
     String currentMonth = expenseProvider.getMonthlyData(expenseProvider.getCurrentMonthYear())?.monthYear ?? "Unknown";
     final monthlyData = expenseProvider.getMonthlyData(currentMonth);
 
+
+
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          onPressed: (){
+            Navigator.of(context).push(MaterialPageRoute(builder: (context){
+              return AddExpense();
+            }));
+          },
+        child: Icon(Icons.add),
+      ),
       appBar: AppBar(
+        backgroundColor: Color(0xfffdf7eb),
+        elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.only(left: 20.0, top: 10.0),
           child: CircleAvatar(
@@ -39,8 +55,12 @@ class HomeScreen extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconButton(onPressed: (){}, icon: Icon(Icons.arrow_drop_down)),
-            Text(currentMonth.toString(), style: GoogleFonts.poppins(fontSize: 14.0),),
+            Icon(Icons.arrow_drop_down),
+            Consumer<ExpenseProvider>(
+                builder: (context, expenseProvider, child){
+                  return Text(currentMonth.toString(), style: GoogleFonts.poppins(fontSize: 14.0),);
+                }
+            ),
           ],
         ),
         centerTitle: true,
@@ -52,10 +72,108 @@ class HomeScreen extends StatelessWidget {
       body: monthlyData == null? Center(child: Text("No data found for $currentMonth"))
           :
           //monthly data is not null (btw it wont be null in any case.)
-      Column(
-        children: [
+      Scaffold(
+        backgroundColor: Color(0xfffdf7eb),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              children: [
+                Center(child: Text("Account Balance", style: GoogleFonts.poppins(color: Colors.grey, fontSize: 18.0),)),
+                SizedBox(height: 10.0,),
+                Center(child: Text("₹ ${monthlyData.totalIncome - monthlyData.totalExpense}", style: GoogleFonts.poppins(fontSize: 55.0, fontWeight: FontWeight.w500),)),
+                SizedBox(height: 10.0,),
+                //Income and expense cards
+                Row(
+                  children: [
+                    //Income Card
+                    Expanded(
+                      child: Container(
+                        height: 100.0,
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(20.0)
+                        ),
+                        child: Row(
+                          children: [
+                            SizedBox(width: 10.0,),
+                            CircleAvatar(
+                              backgroundColor: Colors.white,
+                              child: Icon(Icons.arrow_downward),
+                              radius: 27.0,
+                            ),
+                            SizedBox(width: 10.0,),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Income", style: GoogleFonts.poppins(color: Colors.white, fontSize: 14.0, fontWeight: FontWeight.w500),),
+                                Text("₹ ${monthlyData.totalIncome}", style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25.0),),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 20.0,),
+                    //Expense Card
+                    Expanded(
+                      child: Container(
+                        height: 100.0,
+                        decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(20.0)
+                        ),
+                        child: Row(
+                          children: [
+                            SizedBox(width: 10.0,),
+                            CircleAvatar(
+                              backgroundColor: Colors.white,
+                              child: Icon(Icons.arrow_upward),
+                              radius: 27.0,
+                            ),
+                            SizedBox(width: 10.0,),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Expense", style: GoogleFonts.poppins(color: Colors.white, fontSize: 14.0, fontWeight: FontWeight.w500),),
+                                Consumer<ExpenseProvider>(
+                                    builder: (context, expenseProvider, child){
+                                      return Text("₹ ${monthlyData.totalExpense}", style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25.0),);
+                                    }),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 30.0,),
+                //Expenses List
+                Column(
+                  children: [
+                    for(int i = 0; i <monthlyData.expenses.length; i++)...[
+                      ListTile(
+                        title: Text("${monthlyData.expenses[i].description}"),
+                        subtitle: Text("${monthlyData.expenses[i].category}"),
+                        trailing: Column(
+                          children: [
+                            Text("- ${monthlyData.expenses[i].amount}", style: GoogleFonts.poppins(fontSize: 18.0, color: Colors.red, fontWeight: FontWeight.w600),),
+                            Text("${DateFormat.jm().format(monthlyData.expenses[i].date)}"),
+                          ],
+                        ),
+                      ),
+                    ],
 
-        ],
+
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
       )
     );
   }

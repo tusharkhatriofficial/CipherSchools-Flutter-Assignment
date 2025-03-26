@@ -51,22 +51,49 @@ class ExpenseProvider extends ChangeNotifier {
   }
 
   // Add Expense
-  Future<void> addExpense(String monthYear, Expense newExpense) async {
-    MonthlyData? monthlyData = _box.get(monthYear);
+  Future<void> addExpense(String category, String description, double amount) async {
+    final box = Hive.box<MonthlyData>('monthly_data');
+
+    String currentMonth = getCurrentMonthYear();
+
+    // Get existing MonthlyData for the month or create a new one
+    MonthlyData? monthlyData = box.get(currentMonth);
 
     if (monthlyData == null) {
-      await _ensureCurrentMonthData(); // Ensure it exists
-      monthlyData = _box.get(monthYear);
+      monthlyData = MonthlyData(
+        monthYear: currentMonth,
+        totalIncome: 0.0,
+        totalExpense: 0.0,
+        categoryExpenses: {},
+        expenses: [],
+      );
     }
 
-    monthlyData!.expenses.add(newExpense);
-    monthlyData.totalExpense += newExpense.amount;
-    monthlyData.categoryExpenses[newExpense.category] =
-        (monthlyData.categoryExpenses[newExpense.category] ?? 0) + newExpense.amount;
+    // Create a new Expense object
+    Expense newExpense = Expense(
+      category: category,
+      description: description,
+      amount: amount,
+      date: DateTime.now(),
+    );
 
-    await _box.put(monthYear, monthlyData);
+    // Add new expense to the expenses list
+    monthlyData.expenses.add(newExpense);
+
+    // Update category-wise expenses
+    monthlyData.categoryExpenses[category] =
+        (monthlyData.categoryExpenses[category] ?? 0) + amount;
+
+    // Update total expense
+    monthlyData.totalExpense += amount;
+
+    // Save updated data back to Hive
+    await box.put(currentMonth, monthlyData);
     notifyListeners();
+
+    print("Expense added to ${monthlyData.monthYear}");
   }
+
 
   // Update Income
   Future<void> updateMonthlyIncome(String monthYear, double income) async {

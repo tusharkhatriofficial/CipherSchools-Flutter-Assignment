@@ -8,7 +8,7 @@ part of 'expense.dart';
 
 class ExpenseAdapter extends TypeAdapter<Expense> {
   @override
-  final int typeId = 1;
+  final int typeId = 3;
 
   @override
   Expense read(BinaryReader reader) {
@@ -18,20 +18,23 @@ class ExpenseAdapter extends TypeAdapter<Expense> {
     };
     return Expense(
       category: fields[0] as String,
-      amount: fields[1] as double,
-      date: fields[2] as DateTime,
+      description: fields[1] as String,
+      amount: fields[2] as double,
+      date: fields[3] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, Expense obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.category)
       ..writeByte(1)
-      ..write(obj.amount)
+      ..write(obj.description)
       ..writeByte(2)
+      ..write(obj.amount)
+      ..writeByte(3)
       ..write(obj.date);
   }
 
