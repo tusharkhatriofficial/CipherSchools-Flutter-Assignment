@@ -5,6 +5,7 @@ import '../models/monthly_data.dart';
 
 class ExpenseProvider extends ChangeNotifier {
   late Box<MonthlyData> _box;
+  bool _isInitialized = false;
 
   ExpenseProvider() {
     _init();
@@ -13,6 +14,7 @@ class ExpenseProvider extends ChangeNotifier {
   Future<void> _init() async {
     _box = await Hive.openBox<MonthlyData>('monthly_data');
     _ensureCurrentMonthData();  // Ensure data is created when app starts
+    _isInitialized = true;
     notifyListeners();
   }
 
@@ -47,6 +49,7 @@ class ExpenseProvider extends ChangeNotifier {
 
   // Get Monthly Data
   MonthlyData? getMonthlyData(String monthYear) {
+    if(!_isInitialized) return null;
     return _box.get(monthYear);
   }
 

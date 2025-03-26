@@ -17,6 +17,7 @@ void main() async {
   // Register adapters
   Hive.registerAdapter(ExpenseAdapter());
   Hive.registerAdapter(MonthlyDataAdapter());
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
