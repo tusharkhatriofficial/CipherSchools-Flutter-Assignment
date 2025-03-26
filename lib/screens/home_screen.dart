@@ -1,6 +1,7 @@
 import 'package:cipherx/constants/colors.dart';
 import 'package:cipherx/helpers/auth_helper.dart';
 import 'package:cipherx/screens/add_expense.dart';
+import 'package:cipherx/screens/profile_screen.dart';
 import 'package:cipherx/screens/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,16 +17,7 @@ import 'add_income.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  void logout(BuildContext context) async {
-    bool isSignedOut = await signOut();
-    if(isSignedOut == true){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-        return WelcomeScreen();
-      }));
-    }else{
-      print("Error signing out");
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +48,15 @@ class HomeScreen extends StatelessWidget {
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.only(left: 20.0, top: 10.0),
-          child: CircleAvatar(
-            backgroundImage: NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWkpRcVB4hMuHQo3ZoEu0ySR4ZgHCYIz45QQ&s"),
+          child: InkWell(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return ProfileScreen();
+              }));
+            },
+            child: CircleAvatar(
+              backgroundImage: NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWkpRcVB4hMuHQo3ZoEu0ySR4ZgHCYIz45QQ&s"),
+            ),
           ),
         ),
         title: Row(
