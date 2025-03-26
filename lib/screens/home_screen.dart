@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../models/expense.dart';
 import '../providers/expense_provider.dart';
+import 'add_income.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -117,7 +118,7 @@ class HomeScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text("Income", style: GoogleFonts.poppins(color: Colors.white, fontSize: 14.0, fontWeight: FontWeight.w500),),
-                                    Text("₹ ${monthlyData.totalIncome}", style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25.0),),
+                                    Text("₹ ${monthlyData.totalIncome}", style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),),
                                   ],
                                 )
                               ],
@@ -126,7 +127,7 @@ class HomeScreen extends StatelessWidget {
                           Positioned(
                               child: IconButton(onPressed: (){
                                 //TODO: Edit income
-                                showModalBottomSheet(context: context, builder: builder)
+                                showAmountBottomSheet(context);
 
                               }, icon: Icon(Icons.edit, size: 30.0, color: kPrimaryTextColor,)),
                             right: 1.0,
@@ -160,7 +161,7 @@ class HomeScreen extends StatelessWidget {
                                 Text("Expense", style: GoogleFonts.poppins(color: Colors.white, fontSize: 14.0, fontWeight: FontWeight.w500),),
                                 Consumer<ExpenseProvider>(
                                     builder: (context, expenseProvider, child){
-                                      return Text("₹ ${monthlyData.totalExpense}", style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25.0),);
+                                      return Text("₹ ${monthlyData.totalExpense}", style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),);
                                     }),
                               ],
                             ),
