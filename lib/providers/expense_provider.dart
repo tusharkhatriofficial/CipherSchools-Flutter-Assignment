@@ -18,7 +18,7 @@ class ExpenseProvider extends ChangeNotifier {
 
   // Ensure current month has data in Hive
   Future<void> _ensureCurrentMonthData() async {
-    String currentMonth = _getCurrentMonthYear();
+    String currentMonth = getCurrentMonthYear();
 
     if (!_box.containsKey(currentMonth)) {
       await _box.put(
@@ -36,7 +36,7 @@ class ExpenseProvider extends ChangeNotifier {
   }
 
   // Function to get current month in "March 2025" format
-  String _getCurrentMonthYear() {
+  String getCurrentMonthYear() {
     DateTime now = DateTime.now();
     List<String> monthNames = [
       "January", "February", "March", "April", "May", "June",

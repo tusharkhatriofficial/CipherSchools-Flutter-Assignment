@@ -1,16 +1,33 @@
+import 'package:cipherx/providers/expense_provider.dart';
 import 'package:cipherx/screens/home_screen.dart';
 import 'package:cipherx/screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
+import 'models/expense.dart';
+import 'models/monthly_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  // Register adapters
+  Hive.registerAdapter(ExpenseAdapter());
+  Hive.registerAdapter(MonthlyDataAdapter());
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(
+      MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (_) => ExpenseProvider()),
+      ],
+        child: MyApp(),
+      )
+  );
 }
 
 class MyApp extends StatelessWidget {
