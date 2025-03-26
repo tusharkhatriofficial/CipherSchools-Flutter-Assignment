@@ -4,6 +4,7 @@ import 'package:cipherx/screens/add_expense.dart';
 import 'package:cipherx/screens/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -32,16 +33,20 @@ class HomeScreen extends StatelessWidget {
     String currentMonth = expenseProvider.getMonthlyData(expenseProvider.getCurrentMonthYear())?.monthYear ?? "Unknown";
     final monthlyData = expenseProvider.getMonthlyData(currentMonth);
 
+    void deleteExpense(BuildContext context){
+
+    }
 
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        backgroundColor: kPrimaryColor,
           onPressed: (){
             Navigator.of(context).push(MaterialPageRoute(builder: (context){
               return AddExpense();
             }));
           },
-        child: Icon(Icons.add),
+        child: Icon(Icons.add, color: kPrimaryTextColor,),
       ),
       appBar: AppBar(
         backgroundColor: Color(0xfffdf7eb),
@@ -155,19 +160,38 @@ class HomeScreen extends StatelessWidget {
                 Column(
                   children: [
                     for(int i = 0; i <monthlyData.expenses.length; i++)...[
-                      ListTile(
-                        title: Text("${monthlyData.expenses[i].description}"),
-                        subtitle: Text("${monthlyData.expenses[i].category}"),
-                        trailing: Column(
-                          children: [
-                            Text("- ${monthlyData.expenses[i].amount}", style: GoogleFonts.poppins(fontSize: 18.0, color: Colors.red, fontWeight: FontWeight.w600),),
-                            Text("${DateFormat.jm().format(monthlyData.expenses[i].date)}"),
-                          ],
+                      //Expense card with slide functionality
+                      Slidable(
+                        key: const ValueKey(0),
+                        startActionPane: ActionPane(
+                            motion:  ScrollMotion(),
+                            children:  [
+                              SlidableAction(
+                                onPressed: deleteExpense,
+                                backgroundColor: Color(0xFFFE4A49),
+                                foregroundColor: Colors.white,
+                                icon: Icons.delete,
+                                label: 'Delete',
+                              ),
+                            ]
+                        ),
+                        child: Material(
+                          elevation: 2.0,
+                          color: kPrimaryTextColor,
+                          child: ListTile(
+                            title: Text("${monthlyData.expenses[i].description}"),
+                            subtitle: Text("${monthlyData.expenses[i].category}"),
+                            trailing: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text("- ${monthlyData.expenses[i].amount}", style: GoogleFonts.poppins(fontSize: 18.0, color: Colors.red, fontWeight: FontWeight.w600),),
+                                Text("${DateFormat.jm().format(monthlyData.expenses[i].date)}"),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ],
-
-
                   ],
                 ),
               ],
