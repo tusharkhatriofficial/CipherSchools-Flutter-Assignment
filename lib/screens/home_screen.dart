@@ -33,8 +33,10 @@ class HomeScreen extends StatelessWidget {
     String currentMonth = expenseProvider.getMonthlyData(expenseProvider.getCurrentMonthYear())?.monthYear ?? "Unknown";
     final monthlyData = expenseProvider.getMonthlyData(currentMonth);
 
-    void deleteExpense(BuildContext context){
-
+    void deleteExpense(int index){
+      print("Yayy! delete expense here!");
+      //pass another month if not the current to delete data
+      expenseProvider.deleteExpense(currentMonth, index);
     }
 
 
@@ -91,33 +93,46 @@ class HomeScreen extends StatelessWidget {
                 //Income and expense cards
                 Row(
                   children: [
-                    //Income Card
                     Expanded(
-                      child: Container(
-                        height: 100.0,
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(20.0)
-                        ),
-                        child: Row(
-                          children: [
-                            SizedBox(width: 10.0,),
-                            CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: Icon(Icons.arrow_downward),
-                              radius: 27.0,
+                      child: Stack(
+                        children: [
+                          //Income Card
+                          Container(
+                            height: 100.0,
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(20.0)
                             ),
-                            SizedBox(width: 10.0,),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Row(
                               children: [
-                                Text("Income", style: GoogleFonts.poppins(color: Colors.white, fontSize: 14.0, fontWeight: FontWeight.w500),),
-                                Text("₹ ${monthlyData.totalIncome}", style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25.0),),
+                                SizedBox(width: 10.0,),
+                                CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  child: Icon(Icons.arrow_downward),
+                                  radius: 27.0,
+                                ),
+                                SizedBox(width: 10.0,),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Income", style: GoogleFonts.poppins(color: Colors.white, fontSize: 14.0, fontWeight: FontWeight.w500),),
+                                    Text("₹ ${monthlyData.totalIncome}", style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25.0),),
+                                  ],
+                                )
                               ],
-                            )
-                          ],
-                        ),
+                            ),
+                          ),
+                          Positioned(
+                              child: IconButton(onPressed: (){
+                                //TODO: Edit income
+                                showModalBottomSheet(context: context, builder: builder)
+
+                              }, icon: Icon(Icons.edit, size: 30.0, color: kPrimaryTextColor,)),
+                            right: 1.0,
+                            top: 1.0,
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(width: 20.0,),
@@ -162,12 +177,12 @@ class HomeScreen extends StatelessWidget {
                     for(int i = 0; i <monthlyData.expenses.length; i++)...[
                       //Expense card with slide functionality
                       Slidable(
-                        key: const ValueKey(0),
+                        key: ValueKey(monthlyData.expenses[i].date.millisecondsSinceEpoch),
                         startActionPane: ActionPane(
                             motion:  ScrollMotion(),
                             children:  [
                               SlidableAction(
-                                onPressed: deleteExpense,
+                                onPressed: (context) => {deleteExpense(i)},
                                 backgroundColor: Color(0xFFFE4A49),
                                 foregroundColor: Colors.white,
                                 icon: Icons.delete,
@@ -176,7 +191,8 @@ class HomeScreen extends StatelessWidget {
                             ]
                         ),
                         child: Material(
-                          elevation: 2.0,
+                          borderRadius: BorderRadius.circular(12.0),
+                          elevation: 1.0,
                           color: kPrimaryTextColor,
                           child: ListTile(
                             title: Text("${monthlyData.expenses[i].description}"),
@@ -191,6 +207,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                       ),
+                      SizedBox(height: 10.0,)
                     ],
                   ],
                 ),

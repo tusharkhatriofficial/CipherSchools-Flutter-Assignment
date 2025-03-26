@@ -97,6 +97,25 @@ class ExpenseProvider extends ChangeNotifier {
     print("Expense added to ${monthlyData.monthYear}");
   }
 
+  void deleteExpense(String monthYear, int index) {
+    MonthlyData? monthlyData = _box.get(monthYear);
+
+    if (monthlyData != null && index >= 0 &&
+        index < monthlyData.expenses.length) {
+      //Subtract deleted items cost from total expense
+      double deletedAmount = monthlyData.expenses[index].amount;
+
+      // Remove the expense
+      monthlyData.expenses.removeAt(index);
+
+      // Update total expense
+      monthlyData.totalExpense -= deletedAmount;
+
+      _box.put(monthYear, monthlyData); // Update Hive
+      notifyListeners(); // Notify the UI to refresh
+    }
+  }
+
 
   // Update Income
   Future<void> updateMonthlyIncome(String monthYear, double income) async {
