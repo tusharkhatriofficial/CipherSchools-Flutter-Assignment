@@ -35,7 +35,7 @@ class WelcomeScreen extends StatelessWidget {
                       SizedBox(width: 20.0,),
                       InkWell(
                         onTap: (){
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
                             return SignupScreen();
                           }));
                         },

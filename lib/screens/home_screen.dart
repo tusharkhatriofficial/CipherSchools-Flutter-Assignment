@@ -178,7 +178,16 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(height: 30.0,),
                 //Expenses List
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Row(
+                      children: [
+                        Icon(Icons.info, size: 14.0,),
+                        SizedBox(width: 10.0,),
+                        Text("Swipe right to delete an expense."),
+                      ],
+                    ),
+                    SizedBox(height: 10.0,),
                     for(int i = 0; i <monthlyData.expenses.length; i++)...[
                       //Expense card with slide functionality
                       Slidable(

@@ -39,7 +39,7 @@ class _SignupScreenState extends State<SignupScreen> {
         //Create Firebase User
         createUserInFirebase(uid, name, email);
         await saveUserUID(uid);
-        Navigator.of(context).push(MaterialPageRoute(builder: (context){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
           return HomeScreen();
         }));
       }else{
@@ -57,9 +57,9 @@ class _SignupScreenState extends State<SignupScreen> {
         //Create Firebase User
         createUserInFirebase(uid, name, email);
         await saveUserUID(uid);
-        Navigator.push(context, MaterialPageRoute(builder: (context){
-          return HomeScreen();
-        }));
+       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+         return HomeScreen();
+       }));
       } else {
         print("Sign-Up failed");
       }

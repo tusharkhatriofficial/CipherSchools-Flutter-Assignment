@@ -25,7 +25,7 @@ class _SignupScreenState extends State<LoginScreen> {
       UserCredential? userCredential = await signInWithGoogle();
       if(userCredential != null){
         await saveUserUID(userCredential.user!.uid);
-        Navigator.of(context).push(MaterialPageRoute(builder: (context){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
           return HomeScreen();
         }));
       }else{
@@ -37,7 +37,7 @@ class _SignupScreenState extends State<LoginScreen> {
       UserCredential? userCredential = await signInWithEmailAndPassword(_emailController.text, _passwordController.text);
       if (userCredential != null) {
         await saveUserUID(userCredential.user!.uid);
-        Navigator.push(context, MaterialPageRoute(builder: (context){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
           return HomeScreen();
         }));
       } else {
